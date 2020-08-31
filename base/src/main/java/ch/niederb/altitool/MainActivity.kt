@@ -308,14 +308,22 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             if (location != null) {
                 val chCoordinates = convertCoordinates(location)
-                val integerFormat = DecimalFormat("####")
-                val df = DecimalFormat("####.##")
+                val integerFormat = DecimalFormat("###")
+                val decimalFormat = DecimalFormat("000.00")
+
                 findViewById<TextView>(R.id.xKm).text = integerFormat.format(chCoordinates.x / 1000)
                 findViewById<TextView>(R.id.yKm).text = integerFormat.format(chCoordinates.y / 1000)
                 findViewById<TextView>(R.id.zKm).text = integerFormat.format(chCoordinates.z / 1000)
-                findViewById<TextView>(R.id.xMeter).text = df.format(chCoordinates.x)
-                findViewById<TextView>(R.id.yMeter).text = df.format(chCoordinates.y)
-                findViewById<TextView>(R.id.zMeter).text = df.format(chCoordinates.z)
+
+
+                findViewById<TextView>(R.id.xMeter).text = decimalFormat.format(chCoordinates.x % 1000)
+                findViewById<TextView>(R.id.yMeter).text = decimalFormat.format(chCoordinates.y % 1000)
+                findViewById<TextView>(R.id.zMeter).text = decimalFormat.format(chCoordinates.z % 1000)
+
+                findViewById<TextView>(R.id.accuracyMeter).text = decimalFormat.format(location.accuracy)
+                //findViewById<TextView>(R.id.altitudeAccuracyMeter).text = decimalFormat.format(location.verticalAccuracyMeters)
+
+                findViewById<TextView>(R.id.speedMeter).text = decimalFormat.format(location.speed)
             }
         }
     }
