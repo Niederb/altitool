@@ -309,21 +309,45 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             if (location != null) {
                 val chCoordinates = convertCoordinates(location)
                 val integerFormat = DecimalFormat("###")
-                val decimalFormat = DecimalFormat("000.00")
+                val decimalFormat = DecimalFormat("###.00")
 
                 findViewById<TextView>(R.id.xKm).text = integerFormat.format(chCoordinates.x / 1000)
                 findViewById<TextView>(R.id.yKm).text = integerFormat.format(chCoordinates.y / 1000)
-                findViewById<TextView>(R.id.zKm).text = integerFormat.format(chCoordinates.z / 1000)
-
-
+                findViewById<TextView>(R.id.zKm).text = if ((chCoordinates.z / 1000).toInt() > 0) {
+                    integerFormat.format(chCoordinates.z / 1000)
+                } else {
+                    ""
+                }
                 findViewById<TextView>(R.id.xMeter).text = decimalFormat.format(chCoordinates.x % 1000)
                 findViewById<TextView>(R.id.yMeter).text = decimalFormat.format(chCoordinates.y % 1000)
                 findViewById<TextView>(R.id.zMeter).text = decimalFormat.format(chCoordinates.z % 1000)
 
                 findViewById<TextView>(R.id.accuracyMeter).text = decimalFormat.format(location.accuracy)
-                //findViewById<TextView>(R.id.altitudeAccuracyMeter).text = decimalFormat.format(location.verticalAccuracyMeters)
+                findViewById<TextView>(R.id.altitudeAccuracyMeter).text =  if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    decimalFormat.format(location.verticalAccuracyMeters)
+                } else {
+                    "-"
+                }
+
+                findViewById<TextView>(R.id.speedAccuracyMeter).text =  if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                     decimalFormat.format(location.speedAccuracyMetersPerSecond)
+                } else {
+                    "-"
+                }
 
                 findViewById<TextView>(R.id.speedMeter).text = decimalFormat.format(location.speed)
+
+                findViewById<TextView>(R.id.provider).text = location.provider
+                /*float 	getBearing()
+
+                Get the bearing, in degrees.
+                float 	getBearingAccuracyDegrees()
+
+                Get the estimated bearing accuracy of this location, in degrees.
+                long 	getElapsedRealtimeNanos()
+Get the longitude, in degrees.
+String 	getProvider()
+                */
             }
         }
     }

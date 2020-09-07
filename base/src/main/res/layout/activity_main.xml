@@ -49,203 +49,263 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TableLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <TableRow
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="50dp">
 
-            <TextView
-                android:id="@+id/xLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="X Koordinate"
-                android:textSize="20sp" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/xKm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/xLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="X Koordinate"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/xMeter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
-        </TableRow>
+                <TextView
+                    android:id="@+id/xKm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+                <TextView
+                    android:id="@+id/xMeter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/yLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Y Koordinate"
-                android:textSize="20sp" />
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
-            <TextView
-                android:id="@+id/yKm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/yLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Y Koordinate"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/yMeter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/yKm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
 
-        </TableRow>
+                <TextView
+                    android:id="@+id/yMeter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            </TableRow>
 
-            <TextView
-                android:id="@+id/accuracyLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Genauigkeit (m)"
-                android:textSize="20sp" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/accuracyKm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/accuracyLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Genauigkeit (m)"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/accuracyMeter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
-        </TableRow>
+                <TextView
+                    android:id="@+id/accuracyKm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+                <TextView
+                    android:id="@+id/accuracyMeter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/zLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="M.ü.M."
-                android:textSize="20sp" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/zKm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/zLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="M.ü.M."
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/zMeter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
-        </TableRow>
+                <TextView
+                    android:id="@+id/zKm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/zMeter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </TableRow>
 
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/altitudeAccuracyLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Genauigkeit (m)"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/altitudeAccuracyLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Genauigkeit (m)"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/altitudeAccuracyKm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/altitudeAccuracyKm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/altitudeAccuracyMeter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
-        </TableRow>
+                <TextView
+                    android:id="@+id/altitudeAccuracyMeter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/speedLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="m/s"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/speedLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="m/s"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/speedDummy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/speedDummy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/speedMeter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
-        </TableRow>
+                <TextView
+                    android:id="@+id/speedMeter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </TableRow>
 
-    </TableLayout>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/speedAccuracyLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Genauigkeit (m)"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/speedAccuracyKm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/speedAccuracyMeter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/providerLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Provider"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/providerDummy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/provider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -257,7 +257,7 @@ class ForegroundOnlyLocationService : Service() {
         //      4. Build and issue the notification
         val mainNotificationText = if (location != null) {
             val coordinates = convertCoordinates(location)
-            val df = DecimalFormat("####.##")
+            val df = DecimalFormat("###,###.00")
             val s = "X: ${df.format(coordinates.x)}\nY: ${df.format(coordinates.y)}\nZ: ${df.format(coordinates.z)}"
             s
         } else {
