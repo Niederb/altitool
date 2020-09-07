@@ -272,6 +272,7 @@ class ForegroundOnlyLocationService : Service() {
 
             val notificationChannel = NotificationChannel(
                 NOTIFICATION_CHANNEL_ID, titleText, NotificationManager.IMPORTANCE_DEFAULT)
+            notificationChannel.setSound(null, null);
 
             // Adds NotificationChannel to system. Attempting to create an
             // existing notification channel with its original values performs
@@ -309,6 +310,7 @@ class ForegroundOnlyLocationService : Service() {
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setOngoing(true)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setSound(null)
             .addAction(
                 R.drawable.ic_launch, getString(R.string.launch_activity),
                 activityPendingIntent
@@ -318,6 +320,7 @@ class ForegroundOnlyLocationService : Service() {
                 getString(R.string.stop_location_updates_button_text),
                 servicePendingIntent
             )
+
             .build()
     }
 
@@ -331,7 +334,7 @@ class ForegroundOnlyLocationService : Service() {
     }
 
     companion object {
-        private const val TAG = "ForegroundOnlyLocationService"
+        private const val TAG = "LocationService"
 
         private const val PACKAGE_NAME = "ch.niederb.altitool"
 
@@ -345,6 +348,6 @@ class ForegroundOnlyLocationService : Service() {
 
         private const val NOTIFICATION_ID = 12345678
 
-        private const val NOTIFICATION_CHANNEL_ID = "while_in_use_channel_01"
+        private const val NOTIFICATION_CHANNEL_ID = "location_channel"
     }
 }
