@@ -280,10 +280,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun updateButtonState(trackingLocation: Boolean) {
-        if (trackingLocation) {
-            foregroundOnlyLocationButton.text = getString(R.string.stop_location_updates_button_text)
+        foregroundOnlyLocationButton.text = if (trackingLocation) {
+            getString(R.string.stop_location_updates_button_text)
         } else {
-            foregroundOnlyLocationButton.text = getString(R.string.start_location_updates_button_text)
+            getString(R.string.start_location_updates_button_text)
         }
     }
 

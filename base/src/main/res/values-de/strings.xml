@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">altitool</string>
-    <string name="no_location_text">Keine Position verfügbar</string>
+    <string name="no_location_text">Position nicht verfügbar</string>
     <string name="location_updated">Position aktualisiert: %1$s</string>
     <string name="settings">Einstellungen</string>
     <string name="launch_activity">Altitool öffnen</string>
