@@ -1,10 +1,6 @@
 package ch.niederb.altitool
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -13,42 +9,15 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
+import android.text.format.DateFormat
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import android.util.Log
-
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import java.sql.Time
+import com.google.android.gms.location.*
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
-
-data class ChCoordinates(val x: Double, val y : Double, val z: Double)
-
-fun convertCoordinates(location: Location): ChCoordinates {
-    val phi = (3600 * location.latitude - 169028.66) / 10000.0;
-    val lambda =(3600 * location.longitude - 26782.5) / 10000.0;
-    val e = (2600072.37
-            + 211455.93 * lambda
-            - 10938.51 * lambda * phi
-            - 0.36 * lambda * phi * phi
-            - 44.54 * lambda * lambda * lambda)
-    val y = e - 2000000.00
-    val n = (1200147.07
-            + 308807.95 * phi
-            + 3745.25 * lambda * lambda
-            + 76.63 * phi * phi
-            - 194.56 * lambda * lambda * phi
-            + 119.79 * phi * phi * phi)
-    val x = n - 1000000.00
-    val h = (location.altitude - 49.55
-            + 2.73 * lambda
-            + 6.94 * phi)
-    return ChCoordinates(x, y, h)
-}
 
 /**
  * Service tracks location when requested and updates Activity via binding. If Activity is
@@ -109,7 +78,11 @@ class ForegroundOnlyLocationService : Service() {
                     intent.putExtra(EXTRA_LOCATION, currentLocation)
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                     if (serviceRunningInForeground) {
-                        notificationManager.notify(NOTIFICATION_ID, generateNotification(currentLocation))
+                        notificationManager.notify(
+                            NOTIFICATION_ID, generateNotification(
+                                currentLocation
+                            )
+                        )
                     }
                 } else {
                     Log.d(TAG, "Location information is not available.")
@@ -192,7 +165,11 @@ class ForegroundOnlyLocationService : Service() {
         startService(Intent(applicationContext, ForegroundOnlyLocationService::class.java))
 
         try {
-            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.myLooper()
+            )
         } catch (unlikely: SecurityException) {
             SharedPreferenceUtil.saveLocationTrackingPref(this, false)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
@@ -233,8 +210,14 @@ class ForegroundOnlyLocationService : Service() {
         //      4. Build and issue the notification
         val mainNotificationText = if (location != null) {
             val coordinates = convertCoordinates(location)
+            val date = Date(location.time)
+            //val dateFormat = DateFormat.getTimeFormat(applicationContext)
+            val timeFormat = SimpleDateFormat("hh:mm:ss")
+            //val dateFormat = java.text.format.DateFormat.getTimeInstance()
             val df = DecimalFormat("###,###.00")
-            val s = "X: ${df.format(coordinates.x)}\nY: ${df.format(coordinates.y)}\nZ: ${df.format(coordinates.z)}"
+            val s = "X: ${df.format(coordinates.x)}\nY: ${df.format(coordinates.y)}\nZ: ${df.format(
+                coordinates.z
+            )}\nT: ${timeFormat.format(date)}"
             s
         } else {
             getString(R.string.no_location_text)
@@ -247,7 +230,8 @@ class ForegroundOnlyLocationService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val notificationChannel = NotificationChannel(
-                NOTIFICATION_CHANNEL_ID, titleText, NotificationManager.IMPORTANCE_DEFAULT)
+                NOTIFICATION_CHANNEL_ID, titleText, NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationChannel.setSound(null, null);
 
             // Adds NotificationChannel to system. Attempting to create an
@@ -268,18 +252,17 @@ class ForegroundOnlyLocationService : Service() {
         cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true)
 
         val servicePendingIntent = PendingIntent.getService(
-            this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         val activityPendingIntent = PendingIntent.getActivity(
-            this, 0, launchActivityIntent, 0)
+            this, 0, launchActivityIntent, 0
+        )
 
         // 4. Build and issue the notification.
         // Notification Channel Id is ignored for Android pre O (26).
         val notificationCompatBuilder =
             NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
-
-        val openAction = Notification.Action.Builder(R.drawable.ic_launch, getString(R.string.launch_activity),
-            activityPendingIntent)
 
         return notificationCompatBuilder
             .setStyle(bigTextStyle)
