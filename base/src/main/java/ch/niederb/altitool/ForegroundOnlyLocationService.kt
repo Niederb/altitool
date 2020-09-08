@@ -86,7 +86,6 @@ class ForegroundOnlyLocationService : Service() {
 
     private lateinit var notificationManager: NotificationManager
 
-    // TODO: Step 1.1, Review variables (no changes).
     // FusedLocationProviderClient - Main class for receiving location updates.
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -107,10 +106,8 @@ class ForegroundOnlyLocationService : Service() {
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // TODO: Step 1.2, Review the FusedLocationProviderClient.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // TODO: Step 1.3, Create a LocationRequest.
         locationRequest = LocationRequest().apply {
             interval = TimeUnit.SECONDS.toMillis(10)
             fastestInterval = TimeUnit.SECONDS.toMillis(5)
@@ -118,7 +115,6 @@ class ForegroundOnlyLocationService : Service() {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
-        // TODO: Step 1.4, Initialize the LocationCallback.
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
@@ -211,9 +207,7 @@ class ForegroundOnlyLocationService : Service() {
         startService(Intent(applicationContext, ForegroundOnlyLocationService::class.java))
 
         try {
-            // TODO: Step 1.5, Subscribe to location changes.
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
-
         } catch (unlikely: SecurityException) {
             SharedPreferenceUtil.saveLocationTrackingPref(this, false)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
@@ -224,7 +218,6 @@ class ForegroundOnlyLocationService : Service() {
         Log.d(TAG, "unsubscribeToLocationUpdates()")
 
         try {
-            // TODO: Step 1.6, Unsubscribe to location changes.
             val removeTask = fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             removeTask.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -234,9 +227,7 @@ class ForegroundOnlyLocationService : Service() {
                     Log.d(TAG, "Failed to remove location callback.")
                 }
             }
-
             SharedPreferenceUtil.saveLocationTrackingPref(this, false)
-
         } catch (unlikely: SecurityException) {
             SharedPreferenceUtil.saveLocationTrackingPref(this, true)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")

@@ -134,8 +134,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             if (enabled) {
                 foregroundOnlyLocationService?.unsubscribeToLocationUpdates()
             } else {
-
-                // TODO: Step 1.0, Review Permissions: Checks and requests if needed.
                 if (foregroundPermissionApproved()) {
                     foregroundOnlyLocationService?.subscribeToLocationUpdates()
                         ?: Log.d(TAG, "Service Not Bound")
@@ -193,7 +191,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    // TODO: Step 1.0, Review Permissions: Method checks if permissions approved.
     private fun foregroundPermissionApproved(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
             this,
@@ -201,7 +198,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         )
     }
 
-    // TODO: Step 1.0, Review Permissions: Method requests permissions.
     private fun requestForegroundPermissions() {
         val provideRationale = foregroundPermissionApproved()
 
@@ -232,7 +228,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    // TODO: Step 1.0, Review Permissions: Handles permission result.
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
