@@ -302,6 +302,9 @@ class ForegroundOnlyLocationService : Service() {
         val notificationCompatBuilder =
             NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
 
+        val openAction = Notification.Action.Builder(R.drawable.ic_launch, getString(R.string.launch_activity),
+            activityPendingIntent)
+
         return notificationCompatBuilder
             .setStyle(bigTextStyle)
             .setContentTitle(titleText)
@@ -312,15 +315,15 @@ class ForegroundOnlyLocationService : Service() {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setSound(null)
             .addAction(
-                R.drawable.ic_launch, getString(R.string.launch_activity),
+                0, getString(R.string.launch_activity),
                 activityPendingIntent
             )
             .addAction(
-                R.drawable.ic_cancel,
+                0,
                 getString(R.string.stop_location_updates_button_text),
                 servicePendingIntent
             )
-
+            .setOnlyAlertOnce(true)
             .build()
     }
 
