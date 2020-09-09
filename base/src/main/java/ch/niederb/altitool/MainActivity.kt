@@ -24,6 +24,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import com.google.android.material.snackbar.Snackbar
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 private const val TAG = "MainActivity"
 private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
@@ -278,7 +279,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 val chCoordinates = convertCoordinates(location)
                 val integerFormat = DecimalFormat("###")
                 val decimalFormat = DecimalFormat("###.00")
+                val timeFormat = SimpleDateFormat("hh:mm:ss")
 
+                findViewById<TextView>(R.id.time).text = timeFormat.format(location.time)
                 findViewById<TextView>(R.id.xKm).text = integerFormat.format(chCoordinates.x / 1000)
                 findViewById<TextView>(R.id.yKm).text = integerFormat.format(chCoordinates.y / 1000)
                 findViewById<TextView>(R.id.zKm).text = if ((chCoordinates.z / 1000).toInt() > 0) {

@@ -39,6 +39,36 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/timeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/time"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/timeDummy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
                     android:id="@+id/xLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -136,7 +166,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="M.ü.M."
+                    android:text="@string/meters_above_sea"
                     android:textSize="20sp" />
 
                 <TextView
@@ -168,7 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Genauigkeit (m)"
+                    android:text="@string/accuracy_m"
                     android:textSize="20sp" />
 
                 <TextView
@@ -198,7 +228,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="m/s"
+                    android:text="@string/meters_per_second"
                     android:textSize="20sp" />
 
                 <TextView
@@ -228,7 +258,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Genauigkeit (m)"
+                    android:text="@string/accuracy_m"
                     android:textSize="20sp" />
 
                 <TextView
