@@ -74,10 +74,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var locationServiceBound = false
 
     // Provides location updates for while-in-use feature.
-    private var locationService: ForegroundOnlyLocationService? = null
+    private var locationService: LocationService? = null
 
-    // Listens for location broadcasts from ForegroundOnlyLocationService.
-    private lateinit var broadcastReceiver: ForegroundOnlyBroadcastReceiver
+    // Listens for location broadcasts from LocationService.
+    private lateinit var broadcastReceiver: LocationBroadcastReceiver
 
     private lateinit var sharedPreferences:SharedPreferences
 
@@ -86,10 +86,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     var currentLocation: Location? = null
 
     // Monitors connection to the while-in-use service.
-    private val foregroundOnlyServiceConnection = object : ServiceConnection {
+    private val locationServiceConnection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            val binder = service as ForegroundOnlyLocationService.LocalBinder
+            val binder = service as LocationService.LocalBinder
             locationService = binder.service
             locationServiceBound = true
         }
@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         setContentView(R.layout.activity_main)
 
-        broadcastReceiver = ForegroundOnlyBroadcastReceiver()
+        broadcastReceiver = LocationBroadcastReceiver()
 
         sharedPreferences =
             getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
@@ -137,8 +137,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         )
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
 
-        val serviceIntent = Intent(this, ForegroundOnlyLocationService::class.java)
-        bindService(serviceIntent, foregroundOnlyServiceConnection, Context.BIND_AUTO_CREATE)
+        val serviceIntent = Intent(this, LocationService::class.java)
+        bindService(serviceIntent, locationServiceConnection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onResume() {
@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         LocalBroadcastManager.getInstance(this).registerReceiver(
             broadcastReceiver,
             IntentFilter(
-                ForegroundOnlyLocationService.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
+                LocationService.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
         )
     }
 
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onStop() {
         if (locationServiceBound) {
-            unbindService(foregroundOnlyServiceConnection)
+            unbindService(locationServiceConnection)
             locationServiceBound = false
         }
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
@@ -319,13 +319,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     /**
-     * Receiver for location broadcasts from [ForegroundOnlyLocationService].
+     * Receiver for location broadcasts from [LocationService].
      */
-    private inner class ForegroundOnlyBroadcastReceiver : BroadcastReceiver() {
+    private inner class LocationBroadcastReceiver : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
             val location = intent.getParcelableExtra<Location>(
-                ForegroundOnlyLocationService.EXTRA_LOCATION
+                LocationService.EXTRA_LOCATION
             )
             updateGui(location)
         }

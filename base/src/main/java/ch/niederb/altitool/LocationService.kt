@@ -9,7 +9,6 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
-import android.text.format.DateFormat
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -27,7 +26,7 @@ import java.util.concurrent.TimeUnit
  * For apps running in the background on O+ devices, location is computed much less than previous
  * versions. Please reference documentation for details.
  */
-class ForegroundOnlyLocationService : Service() {
+class LocationService : Service() {
     /*
      * Checks whether the bound activity has really gone away (foreground service with notification
      * created) or simply orientation change (no-op).
@@ -163,7 +162,7 @@ class ForegroundOnlyLocationService : Service() {
         // Binding to this service doesn't actually trigger onStartCommand(). That is needed to
         // ensure this Service can be promoted to a foreground service, i.e., the service needs to
         // be officially started (which we do here).
-        startService(Intent(applicationContext, ForegroundOnlyLocationService::class.java))
+        startService(Intent(applicationContext, LocationService::class.java))
 
         try {
             fusedLocationProviderClient.requestLocationUpdates(
@@ -249,7 +248,7 @@ class ForegroundOnlyLocationService : Service() {
         // 3. Set up main Intent/Pending Intents for notification.
         val launchActivityIntent = Intent(this, MainActivity::class.java)
 
-        val cancelIntent = Intent(this, ForegroundOnlyLocationService::class.java)
+        val cancelIntent = Intent(this, LocationService::class.java)
         cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true)
 
         val servicePendingIntent = PendingIntent.getService(
@@ -292,8 +291,8 @@ class ForegroundOnlyLocationService : Service() {
      * clients, we don't need to deal with IPC.
      */
     inner class LocalBinder : Binder() {
-        internal val service: ForegroundOnlyLocationService
-            get() = this@ForegroundOnlyLocationService
+        internal val service: LocationService
+            get() = this@LocationService
     }
 
     companion object {
