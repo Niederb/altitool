@@ -53,7 +53,7 @@ class ForegroundOnlyLocationService : Service() {
     // Used only for local storage of the last known location. Usually, this would be saved to your
     // database, but because this is a simplified sample without a full database, we only need the
     // last location to create a Notification if the user navigates away from the app.
-    private var currentLocation: Location? = null
+    public var lastLocation: Location? = null
 
     override fun onCreate() {
         Log.d(TAG, "onCreate()")
@@ -73,15 +73,16 @@ class ForegroundOnlyLocationService : Service() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
                 if (locationResult?.lastLocation != null) {
-                    currentLocation = locationResult.lastLocation
+                    val newLocation = locationResult.lastLocation
                     val intent = Intent(ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
-                    intent.putExtra(EXTRA_LOCATION, currentLocation)
+                    intent.putExtra(EXTRA_LOCATION, newLocation)
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                     if (serviceRunningInForeground) {
+                        val notification = generateNotification(
+                            newLocation
+                        )
                         notificationManager.notify(
-                            NOTIFICATION_ID, generateNotification(
-                                currentLocation
-                            )
+                            NOTIFICATION_ID, notification
                         )
                     }
                 } else {
@@ -136,7 +137,7 @@ class ForegroundOnlyLocationService : Service() {
         // we do nothing.
         if (!configurationChange && SharedPreferenceUtil.getLocationTrackingPref(this)) {
             Log.d(TAG, "Start foreground service")
-            val notification = generateNotification(currentLocation)
+            val notification = generateNotification(lastLocation)
             startForeground(NOTIFICATION_ID, notification)
             serviceRunningInForeground = true
         }

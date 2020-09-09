@@ -71,30 +71,32 @@ private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
  * notification. This dismisses the notification and stops the service.
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
-    private var foregroundOnlyLocationServiceBound = false
+    private var locationServiceBound = false
 
     // Provides location updates for while-in-use feature.
-    private var foregroundOnlyLocationService: ForegroundOnlyLocationService? = null
+    private var locationService: ForegroundOnlyLocationService? = null
 
     // Listens for location broadcasts from ForegroundOnlyLocationService.
-    private lateinit var foregroundOnlyBroadcastReceiver: ForegroundOnlyBroadcastReceiver
+    private lateinit var broadcastReceiver: ForegroundOnlyBroadcastReceiver
 
     private lateinit var sharedPreferences:SharedPreferences
 
-    private lateinit var foregroundOnlyLocationButton: Button
+    private lateinit var locationButton: Button
+
+    var currentLocation: Location? = null
 
     // Monitors connection to the while-in-use service.
     private val foregroundOnlyServiceConnection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             val binder = service as ForegroundOnlyLocationService.LocalBinder
-            foregroundOnlyLocationService = binder.service
-            foregroundOnlyLocationServiceBound = true
+            locationService = binder.service
+            locationServiceBound = true
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            foregroundOnlyLocationService = null
-            foregroundOnlyLocationServiceBound = false
+            locationService = null
+            locationServiceBound = false
         }
     }
 
@@ -103,22 +105,22 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         setContentView(R.layout.activity_main)
 
-        foregroundOnlyBroadcastReceiver = ForegroundOnlyBroadcastReceiver()
+        broadcastReceiver = ForegroundOnlyBroadcastReceiver()
 
         sharedPreferences =
             getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
-        foregroundOnlyLocationButton = findViewById(R.id.foreground_only_location_button)
+        locationButton = findViewById(R.id.foreground_only_location_button)
 
-        foregroundOnlyLocationButton.setOnClickListener {
+        locationButton.setOnClickListener {
             val enabled = sharedPreferences.getBoolean(
                 SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
 
             if (enabled) {
-                foregroundOnlyLocationService?.unsubscribeToLocationUpdates()
+                locationService?.unsubscribeToLocationUpdates()
             } else {
                 if (foregroundPermissionApproved()) {
-                    foregroundOnlyLocationService?.subscribeToLocationUpdates()
+                    locationService?.subscribeToLocationUpdates()
                         ?: Log.d(TAG, "Service Not Bound")
                 } else {
                     requestForegroundPermissions()
@@ -141,8 +143,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onResume() {
         super.onResume()
+        if (locationService != null) {
+            updateGui(locationService!!.lastLocation)
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(
-            foregroundOnlyBroadcastReceiver,
+            broadcastReceiver,
             IntentFilter(
                 ForegroundOnlyLocationService.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
         )
@@ -150,15 +155,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(
-            foregroundOnlyBroadcastReceiver
+            broadcastReceiver
         )
         super.onPause()
     }
 
     override fun onStop() {
-        if (foregroundOnlyLocationServiceBound) {
+        if (locationServiceBound) {
             unbindService(foregroundOnlyServiceConnection)
-            foregroundOnlyLocationServiceBound = false
+            locationServiceBound = false
         }
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
 
@@ -227,7 +232,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
                 grantResults[0] == PackageManager.PERMISSION_GRANTED ->
                     // Permission was granted.
-                    foregroundOnlyLocationService?.subscribeToLocationUpdates()
+                    locationService?.subscribeToLocationUpdates()
 
                 else -> {
                     // Permission denied.
@@ -258,10 +263,58 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun updateButtonState(trackingLocation: Boolean) {
-        foregroundOnlyLocationButton.text = if (trackingLocation) {
+        locationButton.text = if (trackingLocation) {
             getString(R.string.stop_location_updates_button_text)
         } else {
             getString(R.string.start_location_updates_button_text)
+        }
+    }
+
+    private fun updateGui(location: Location?) {
+        if (location != null) {
+            val chCoordinates = convertCoordinates(location)
+            val integerFormat = DecimalFormat("###")
+            val decimalFormat = DecimalFormat("###.00")
+            val timeFormat = SimpleDateFormat("hh:mm:ss")
+
+            findViewById<TextView>(R.id.time).text = timeFormat.format(location.time)
+            findViewById<TextView>(R.id.xKm).text = integerFormat.format(chCoordinates.x / 1000)
+            findViewById<TextView>(R.id.yKm).text = integerFormat.format(chCoordinates.y / 1000)
+            findViewById<TextView>(R.id.zKm).text = if ((chCoordinates.z / 1000).toInt() > 0) {
+                integerFormat.format(chCoordinates.z / 1000)
+            } else {
+                ""
+            }
+            findViewById<TextView>(R.id.xMeter).text = decimalFormat.format(chCoordinates.x % 1000)
+            findViewById<TextView>(R.id.yMeter).text = decimalFormat.format(chCoordinates.y % 1000)
+            findViewById<TextView>(R.id.zMeter).text = decimalFormat.format(chCoordinates.z % 1000)
+
+            findViewById<TextView>(R.id.accuracyMeter).text = decimalFormat.format(location.accuracy)
+            findViewById<TextView>(R.id.altitudeAccuracyMeter).text =  if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                decimalFormat.format(location.verticalAccuracyMeters)
+            } else {
+                "-"
+            }
+
+            findViewById<TextView>(R.id.speedAccuracyMeter).text =  if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                decimalFormat.format(location.speedAccuracyMetersPerSecond)
+            } else {
+                "-"
+            }
+
+            findViewById<TextView>(R.id.speedMeter).text = decimalFormat.format(location.speed)
+
+            findViewById<TextView>(R.id.provider).text = location.provider
+            /*float 	getBearing()
+
+            Get the bearing, in degrees.
+            float 	getBearingAccuracyDegrees()
+
+            Get the estimated bearing accuracy of this location, in degrees.
+            long 	getElapsedRealtimeNanos()
+            Get the longitude, in degrees.
+            String 	getProvider()
+            */
         }
     }
 
@@ -274,52 +327,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             val location = intent.getParcelableExtra<Location>(
                 ForegroundOnlyLocationService.EXTRA_LOCATION
             )
-
-            if (location != null) {
-                val chCoordinates = convertCoordinates(location)
-                val integerFormat = DecimalFormat("###")
-                val decimalFormat = DecimalFormat("###.00")
-                val timeFormat = SimpleDateFormat("hh:mm:ss")
-
-                findViewById<TextView>(R.id.time).text = timeFormat.format(location.time)
-                findViewById<TextView>(R.id.xKm).text = integerFormat.format(chCoordinates.x / 1000)
-                findViewById<TextView>(R.id.yKm).text = integerFormat.format(chCoordinates.y / 1000)
-                findViewById<TextView>(R.id.zKm).text = if ((chCoordinates.z / 1000).toInt() > 0) {
-                    integerFormat.format(chCoordinates.z / 1000)
-                } else {
-                    ""
-                }
-                findViewById<TextView>(R.id.xMeter).text = decimalFormat.format(chCoordinates.x % 1000)
-                findViewById<TextView>(R.id.yMeter).text = decimalFormat.format(chCoordinates.y % 1000)
-                findViewById<TextView>(R.id.zMeter).text = decimalFormat.format(chCoordinates.z % 1000)
-
-                findViewById<TextView>(R.id.accuracyMeter).text = decimalFormat.format(location.accuracy)
-                findViewById<TextView>(R.id.altitudeAccuracyMeter).text =  if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    decimalFormat.format(location.verticalAccuracyMeters)
-                } else {
-                    "-"
-                }
-
-                findViewById<TextView>(R.id.speedAccuracyMeter).text =  if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                     decimalFormat.format(location.speedAccuracyMetersPerSecond)
-                } else {
-                    "-"
-                }
-
-                findViewById<TextView>(R.id.speedMeter).text = decimalFormat.format(location.speed)
-
-                findViewById<TextView>(R.id.provider).text = location.provider
-                /*float 	getBearing()
-
-                Get the bearing, in degrees.
-                float 	getBearingAccuracyDegrees()
-
-                Get the estimated bearing accuracy of this location, in degrees.
-                long 	getElapsedRealtimeNanos()
-Get the longitude, in degrees.
-String 	getProvider()
-                */
-            }
+            updateGui(location)
         }
     }
 }
