@@ -82,8 +82,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private lateinit var foregroundOnlyLocationButton: Button
 
-    private lateinit var outputTextView: TextView
-
     // Monitors connection to the while-in-use service.
     private val foregroundOnlyServiceConnection = object : ServiceConnection {
 
@@ -110,7 +108,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
         foregroundOnlyLocationButton = findViewById(R.id.foreground_only_location_button)
-        outputTextView = findViewById(R.id.output_text_view)
 
         foregroundOnlyLocationButton.setOnClickListener {
             val enabled = sharedPreferences.getBoolean(
@@ -267,11 +264,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    private fun logResultsToScreen(output:String) {
-        val outputWithPreviousLogs = "$output\n${outputTextView.text}"
-        outputTextView.text = outputWithPreviousLogs
-    }
-
     /**
      * Receiver for location broadcasts from [ForegroundOnlyLocationService].
      */
@@ -281,10 +273,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             val location = intent.getParcelableExtra<Location>(
                 ForegroundOnlyLocationService.EXTRA_LOCATION
             )
-
-            if (location != null) {
-                logResultsToScreen("Foreground location: ${location.altitude}")
-            }
 
             if (location != null) {
                 val chCoordinates = convertCoordinates(location)
