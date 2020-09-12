@@ -23,4 +23,7 @@
     <string name="meters_per_second">m/s</string>
     <string name="accuracy_m">Accuracy (m)</string>
     <string name="meters_above_sea">m.a.s.l.</string>
+    <string name="distance">Distance</string>
+    <string name="meters_up">Meters up</string>
+    <string name="meters_down">Meters down</string>
 </resources>

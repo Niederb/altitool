@@ -226,7 +226,8 @@ class LocationService : Service() {
             val timeFormat = SimpleDateFormat("hh:mm:ss")
             //val dateFormat = java.text.format.DateFormat.getTimeInstance()
             val df = DecimalFormat("###,###.00")
-            val s = "X: ${df.format(coordinates.x)}\nY: ${df.format(coordinates.y)}\nZ: ${df.format(
+
+            val s = "D: ${df.format(dataIntegration.distance)}\nU: ${df.format(dataIntegration.metersUp)}\nD: ${df.format(dataIntegration.metersDown)}\nZ: ${df.format(
                 coordinates.z
             )}\nT: ${timeFormat.format(date)}"
             s
@@ -259,6 +260,7 @@ class LocationService : Service() {
         // 3. Set up main Intent/Pending Intents for notification.
         val launchActivityIntent = Intent(this, MainActivity::class.java)
         launchActivityIntent.putExtra(EXTRA_LOCATION, lastLocation)
+        launchActivityIntent.putExtra(EXTRA_DATA_INTEGRATION, dataIntegration)
 
         val cancelIntent = Intent(this, LocationService::class.java)
         cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true)
@@ -316,6 +318,8 @@ class LocationService : Service() {
             "$PACKAGE_NAME.action.FOREGROUND_ONLY_LOCATION_BROADCAST"
 
         internal const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
+
+        internal const val EXTRA_DATA_INTEGRATION = "$PACKAGE_NAME.extra.DATA_INTEGRATION"
 
         private const val EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION =
             "$PACKAGE_NAME.extra.CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION"

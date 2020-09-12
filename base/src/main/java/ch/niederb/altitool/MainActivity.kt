@@ -136,6 +136,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             updateGui(location)
         }
 
+        if (intent.hasExtra(LocationService.EXTRA_DATA_INTEGRATION)) {
+            val dataIntegration = intent.getParcelableExtra<DataIntegration>(
+                LocationService.EXTRA_DATA_INTEGRATION
+            )
+            updateDataIntegrationGui(dataIntegration!!)
+        }
     }
 
     override fun onStart() {
@@ -329,13 +335,18 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             */
         }
         if (locationService != null && locationService!!.dataIntegration != null) {
-            findViewById<TextView>(R.id.distance).text =
-                decimalFormat.format(locationService?.dataIntegration?.distance)
-            findViewById<TextView>(R.id.metersUp).text =
-                decimalFormat.format(locationService?.dataIntegration?.metersUp)
-            findViewById<TextView>(R.id.metersDown).text =
-                decimalFormat.format(locationService?.dataIntegration?.metersDown)
+            updateDataIntegrationGui(locationService!!.dataIntegration)
         }
+    }
+
+    private fun updateDataIntegrationGui(dataIntegration: DataIntegration) {
+        val decimalFormat = DecimalFormat("##0.00")
+        findViewById<TextView>(R.id.distance).text =
+            decimalFormat.format(locationService?.dataIntegration?.distance)
+        findViewById<TextView>(R.id.metersUp).text =
+            decimalFormat.format(locationService?.dataIntegration?.metersUp)
+        findViewById<TextView>(R.id.metersDown).text =
+            decimalFormat.format(locationService?.dataIntegration?.metersDown)
     }
 
     /**

@@ -2,14 +2,18 @@ package ch.niederb.altitool
 
 import android.content.Context
 import android.location.Location
+import android.os.Parcelable
 import androidx.core.content.edit
+import kotlinx.android.parcel.Parcelize
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 data class ChCoordinates(val x: Double, val y : Double, val z: Double)
 
-data class DataIntegration(val distance: Double, val metersUp : Double, val metersDown: Double)
+@Parcelize
+data class DataIntegration(val distance: Double, val metersUp : Double, val metersDown: Double) :
+    Parcelable
 
 fun calcDelta(oldLocation: ChCoordinates, newLocation: ChCoordinates): DataIntegration {
     val deltaX = newLocation.x - oldLocation.x

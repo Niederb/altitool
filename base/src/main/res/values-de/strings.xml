@@ -11,4 +11,7 @@
     <string name="meters_per_second">m/s</string>
     <string name="accuracy_m">Genauigkeit (m)</string>
     <string name="meters_above_sea">M.ü.M.</string>
+    <string name="distance">Distanze</string>
+    <string name="meters_up">Meter hoch</string>
+    <string name="meters_down">Meter runter</string>
 </resources>
