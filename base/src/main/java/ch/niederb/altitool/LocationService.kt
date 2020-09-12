@@ -224,7 +224,7 @@ class LocationService : Service() {
             val coordinates = convertCoordinates(location)
             val date = Date(location.time)
             //val dateFormat = DateFormat.getTimeFormat(applicationContext)
-            val timeFormat = SimpleDateFormat("hh:mm:ss")
+            val timeFormat = SimpleDateFormat("HH:mm:ss")
             //val dateFormat = java.text.format.DateFormat.getTimeInstance()
             val df = DecimalFormat("###,###.00")
 
