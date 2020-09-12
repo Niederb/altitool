@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private lateinit var locationButton: Button
 
-    var currentLocation: Location? = null
+    private var lastLocation: Location? = null
 
     // Monitors connection to the while-in-use service.
     private val locationServiceConnection = object : ServiceConnection {
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         sharedPreferences =
             getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
-        locationButton = findViewById(R.id.foreground_only_location_button)
+        locationButton = findViewById(R.id.location_button)
 
         locationButton.setOnClickListener {
             val enabled = sharedPreferences.getBoolean(
@@ -122,11 +122,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (foregroundPermissionApproved()) {
                     locationService?.subscribeToLocationUpdates()
                         ?: Log.d(TAG, "Service Not Bound")
+                    locationService?.dataIntegration = DataIntegration(0.0, 0.0, 0.0)
+                    updateGui(null)
                 } else {
                     requestForegroundPermissions()
                 }
             }
         }
+        if (intent.hasExtra(LocationService.EXTRA_LOCATION)) {
+            val location = intent.getParcelableExtra<Location>(
+                LocationService.EXTRA_LOCATION
+            )
+            updateGui(location)
+        }
+
     }
 
     override fun onStart() {
@@ -271,11 +280,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun updateGui(location: Location?) {
+        val decimalFormat = DecimalFormat("###.00")
         if (location != null) {
             val chCoordinates = convertCoordinates(location)
             val integerFormat = DecimalFormat("###")
-            val decimalFormat = DecimalFormat("###.00")
-            val timeFormat = SimpleDateFormat("hh:mm:ss")
+
+            val timeFormat = SimpleDateFormat("HH:mm:ss")
 
             findViewById<TextView>(R.id.time).text = timeFormat.format(location.time)
             findViewById<TextView>(R.id.xKm).text = integerFormat.format(chCoordinates.x / 1000)
@@ -305,6 +315,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             findViewById<TextView>(R.id.speedMeter).text = decimalFormat.format(location.speed)
 
             findViewById<TextView>(R.id.provider).text = location.provider
+
+            lastLocation = location
+
             /*float 	getBearing()
 
             Get the bearing, in degrees.
@@ -313,8 +326,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             Get the estimated bearing accuracy of this location, in degrees.
             long 	getElapsedRealtimeNanos()
             Get the longitude, in degrees.
-            String 	getProvider()
             */
+        }
+        if (locationService != null && locationService!!.dataIntegration != null) {
+            findViewById<TextView>(R.id.distance).text =
+                decimalFormat.format(locationService?.dataIntegration?.distance)
+            findViewById<TextView>(R.id.metersUp).text =
+                decimalFormat.format(locationService?.dataIntegration?.metersUp)
+            findViewById<TextView>(R.id.metersDown).text =
+                decimalFormat.format(locationService?.dataIntegration?.metersDown)
         }
     }
 
@@ -324,9 +344,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private inner class LocationBroadcastReceiver : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
+
             val location = intent.getParcelableExtra<Location>(
                 LocationService.EXTRA_LOCATION
             )
+            locationService?.updateDataIntegration(location)
             updateGui(location)
         }
     }

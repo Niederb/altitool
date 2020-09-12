@@ -54,6 +54,17 @@ class LocationService : Service() {
     // last location to create a Notification if the user navigates away from the app.
     public var lastLocation: Location? = null
 
+    public var dataIntegration = DataIntegration(0.0, 0.0, 0.0)
+
+    fun updateDataIntegration(newLocation: Location?) {
+        if (lastLocation != null && newLocation != null) {
+            val lastChLocation = convertCoordinates(lastLocation!!)
+            val newChLocation = convertCoordinates(newLocation)
+            dataIntegration = updateIntegration(dataIntegration, lastChLocation, newChLocation)
+        }
+        lastLocation = newLocation
+    }
+
     override fun onCreate() {
         Log.d(TAG, "onCreate()")
 
@@ -247,6 +258,7 @@ class LocationService : Service() {
 
         // 3. Set up main Intent/Pending Intents for notification.
         val launchActivityIntent = Intent(this, MainActivity::class.java)
+        launchActivityIntent.putExtra(EXTRA_LOCATION, lastLocation)
 
         val cancelIntent = Intent(this, LocationService::class.java)
         cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true)
