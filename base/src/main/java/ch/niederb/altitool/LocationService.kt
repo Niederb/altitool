@@ -213,6 +213,7 @@ class LocationService : Service() {
     private fun generateNotification(location: Location?): Notification {
         Log.d(TAG, "generateNotification()")
 
+        updateDataIntegration(location)
         // Main steps for building a BIG_TEXT_STYLE notification:
         //      0. Get data
         //      1. Create Notification Channel for O+

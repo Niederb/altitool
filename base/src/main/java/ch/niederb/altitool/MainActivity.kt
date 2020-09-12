@@ -334,19 +334,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             Get the longitude, in degrees.
             */
         }
-        if (locationService != null && locationService!!.dataIntegration != null) {
-            updateDataIntegrationGui(locationService!!.dataIntegration)
-        }
     }
 
     private fun updateDataIntegrationGui(dataIntegration: DataIntegration) {
         val decimalFormat = DecimalFormat("##0.00")
         findViewById<TextView>(R.id.distance).text =
-            decimalFormat.format(locationService?.dataIntegration?.distance)
+            decimalFormat.format(dataIntegration.distance)
         findViewById<TextView>(R.id.metersUp).text =
-            decimalFormat.format(locationService?.dataIntegration?.metersUp)
+            decimalFormat.format(dataIntegration.metersUp)
         findViewById<TextView>(R.id.metersDown).text =
-            decimalFormat.format(locationService?.dataIntegration?.metersDown)
+            decimalFormat.format(dataIntegration.metersDown)
     }
 
     /**
