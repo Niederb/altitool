@@ -226,11 +226,11 @@ class LocationService : Service() {
             //val dateFormat = DateFormat.getTimeFormat(applicationContext)
             val timeFormat = SimpleDateFormat("HH:mm:ss")
             //val dateFormat = java.text.format.DateFormat.getTimeInstance()
-            val df = DecimalFormat("###,###.00")
+            val df = DecimalFormat("###,##0.00")
 
-            val s = "D: ${df.format(dataIntegration.distance)}\nU: ${df.format(dataIntegration.metersUp)}\nD: ${df.format(dataIntegration.metersDown)}\nZ: ${df.format(
+            val s = "Di: ${df.format(dataIntegration.distance)}\nUp: ${df.format(dataIntegration.metersUp)}\nDn: ${df.format(dataIntegration.metersDown)}\nZ: ${df.format(
                 coordinates.z
-            )}\nT: ${timeFormat.format(date)}"
+            )}\nTi: ${timeFormat.format(date)}"
             s
         } else {
             getString(R.string.no_location_text)

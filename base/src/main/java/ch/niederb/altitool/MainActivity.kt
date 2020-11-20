@@ -290,7 +290,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         if (location != null) {
             val chCoordinates = convertCoordinates(location)
             val integerFormat = DecimalFormat("###")
-
+            val integerCoordinateFormat = DecimalFormat("000.00")
             val timeFormat = SimpleDateFormat("HH:mm:ss")
 
             findViewById<TextView>(R.id.time).text = timeFormat.format(location.time)
@@ -301,9 +301,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             } else {
                 ""
             }
-            findViewById<TextView>(R.id.xMeter).text = decimalFormat.format(chCoordinates.x % 1000)
-            findViewById<TextView>(R.id.yMeter).text = decimalFormat.format(chCoordinates.y % 1000)
-            findViewById<TextView>(R.id.zMeter).text = decimalFormat.format(chCoordinates.z % 1000)
+            findViewById<TextView>(R.id.xMeter).text = integerCoordinateFormat.format(chCoordinates.x % 1000)
+            findViewById<TextView>(R.id.yMeter).text = integerCoordinateFormat.format(chCoordinates.y % 1000)
+            findViewById<TextView>(R.id.zMeter).text = integerCoordinateFormat.format(chCoordinates.z % 1000)
 
             findViewById<TextView>(R.id.accuracyMeter).text = decimalFormat.format(location.accuracy)
             findViewById<TextView>(R.id.altitudeAccuracyMeter).text =  if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

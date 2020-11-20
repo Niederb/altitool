@@ -26,4 +26,6 @@
     <string name="distance">Distance</string>
     <string name="meters_up">Meters up</string>
     <string name="meters_down">Meters down</string>
+    <string name="x_coordinate">X Coordinate</string>
+    <string name="y_coordinate">Y Coordinate</string>
 </resources>
