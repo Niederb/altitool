@@ -47,14 +47,6 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/timeDummy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
-                    android:textSize="20sp" />
-
-                <TextView
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -62,6 +54,7 @@
                     android:text="0"
                     android:textAlignment="textEnd"
                     android:textSize="20sp" />
+
             </TableRow>
 
             <TableRow
@@ -73,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="X Koordinate"
+                    android:text="@string/x_coordinate"
                     android:textSize="20sp" />
 
                 <TextView
@@ -104,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Y Koordinate"
+                    android:text="@string/y_coordinate"
                     android:textSize="20sp" />
 
                 <TextView
