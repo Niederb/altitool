@@ -4,8 +4,6 @@
     <string name="app_name">Swiss Altitool</string>
 
     <string name="launch_activity">Open altitool</string>
-    <string name="location_unknown">Location Unknown</string>
-    <string name="location_updates_label">Location Updates</string>
 
     <string name="permission_rationale">Location permission needed for core functionality</string>
     <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
